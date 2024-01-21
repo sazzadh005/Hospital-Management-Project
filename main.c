@@ -7,7 +7,7 @@
 
 #define USERNAME_LENGHT 100
 #define PASSWORD_LENGHT 100
-#define SIZED 2000
+#define SIZED 200
 #define NAME_LENGHT 50
 #define DESIGNATION_LENGHT 30
 #define DEPARTMENT_LENGHT 50
@@ -206,6 +206,13 @@ void doctors_info()
     fclose(data);
 }
 
+
+void searchDoctor(char* doctorName)
+{
+    FILE* data;
+    data = fopen("doctors_data_base.csv", "r");
+
+}
 
 
 void patient_information()
