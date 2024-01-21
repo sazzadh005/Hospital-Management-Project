@@ -234,10 +234,6 @@ int main()
 
     login_pannel(username,password);
 
-    staff();
-
-    doctors_info();
-
     current_dateTime();
 
     return 0;
