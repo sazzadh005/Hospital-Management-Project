@@ -100,7 +100,17 @@ void login_pannel(char username[],char password[])
 
 void receptionist_database()
 {
+    printf("All Receptionist Information.\n\n");
+    FILE *rdata;
 
+    rdata=fopen("receptionist_database.csv","r");
+
+    char rdetails[SIZED];
+
+    while(fgets(rdetails,SIZED,rdata) !=NULL)
+    {
+        printf("%s",rdetails);
+    }
 }
 
 void nurse_database()
@@ -121,41 +131,21 @@ void nurse_database()
 }
 
 
-void staff_info(char name[],char designation[],char department[],char mob[])
-{
-    printf("Name: %s\nDesignation: %s\nDepartment: %s\n",name,designation,department);
-    printf("Mob: %s\n\n",mob);
-}
-
 void staff()
 {
-    char name[][NAME_LENGHT] ={"Rahima","Uma","Amena","Shilpi","Aman","Sokina","Asma","Bisas","Aklima",
-                                "Moon","Mithee","Lisa","Saiful","Rasel","Munira","Rimon","Prihan","Mina"};
+    printf("All Support Staff's Information\n\n");
+    FILE *ndata;
 
-    char designation[][DESIGNATION_LENGHT] ={"Cleaner","Cleaner","Cleaner","Cleaner","Cleaner","Cleaner","Cleaner","Cleaner","Cleaner",
-                                                "Cleaner","Cleaner","Cleaner", "Cleaner", "Cleaner","Cleaner","Cleaner","Cleaner","Cleaner"};
+    ndata=fopen("support_staff_database.csv","r");
 
-    char department[][DEPARTMENT_LENGHT] ={"Cardiology","Gynecology","All Dept.","General Surgery","General Surgery","All Dept.",
-                                            "All Dept.","Ward & Cabin","Ward & Cabin","Cardiology","Gynecology","All Dept.","General Surgery",
-                                            "General Surgery","All Dept.","All Dept.","Ward & Cabin","Ward & Cabin"};
+    char ndetails[SIZED];
 
-    char mob[][MOBILE_LENGHT] ={"01480-634850","01480-634851","01480-634852","01480-634853","01480-634854","01480-634855",
-                                    "01480-634856","01480-634856","01480-634857","01480-634858","01480-634859","01480-634860",
-                                    "01480-634861","01480-634862","01480-634863","01480-634864","01480-634865","01480-634866"};
-
-    int staff_cnt = sizeof(name) / sizeof(name[0]);
-
-    printf("\nAvailabe in Day Shift(Saturday to Tuesday). Rest of the Days Evening Shift\n\n");
-    for (int i=0; i<staff_cnt/2;i++)
+    while(fgets(ndetails,SIZED,ndata) !=NULL)
     {
-        staff_info(name[i],designation[i],department[i],mob[i]);
+        printf("%s",ndetails);
     }
-
-    printf("\nAvailabe in Day Shift(Saturday to Tuesday). Rest of the Days Evening Shift\n\n");
-    for (int i=staff_cnt/2;i<staff_cnt;i++)
-    {
-        staff_info(name[i],designation[i],department[i],mob[i]);
-    }
+    fclose(ndata);
+    printf("\n");
 }
 
 
@@ -180,6 +170,15 @@ void searchDoctor(char* doctorName)
     FILE* data;
     data = fopen("doctors_data_base.csv", "r");
 
+    char details[SIZED];
+    bool found = false;
+
+    while (fgets(details, SIZED, data) != NULL)
+    {
+        if (strstr(details, doctorName) != NULL)
+        {
+            printf("Doctor's Information:\n%s", details);
+        }
 }
 
 
@@ -202,7 +201,7 @@ int main()
 
     login_pannel(username,password);
 
-
+    receptionist_database();
     nurse_database();
     current_dateTime();
 
