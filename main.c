@@ -30,7 +30,7 @@ void current_dateTime()
     int minute=local_time.tm_min;
     int second=local_time.tm_sec;
 
-    printf("Admission Date & Time: %d-%d-%d  &  %d:%d:%2d",date,month,year,hour,minute,second);
+    printf("Admission Date & Time: %.2d-%.2d-%d  &  %.2d:%.2d:%.2d",date,month,year,hour,minute,second);
 }
 
 int administrator(char user[],char pass[])
@@ -114,8 +114,19 @@ void receptionist_database()
 
 void nurse_database()
 {
+    printf("All Nurse's Information.\n\n");
+    FILE *fdata;
 
+    fdata=fopen("nurses_database.csv","r");
 
+    char fdetails[SIZED];
+
+    while(fgets(fdetails,SIZED,fdata) !=NULL)
+    {
+        printf("%s",fdetails);
+    }
+    fclose(fdata);
+    printf("\n");
 }
 
 
@@ -200,6 +211,8 @@ int main()
 
     login_pannel(username,password);
 
+
+    nurse_database();
     current_dateTime();
 
     return 0;
