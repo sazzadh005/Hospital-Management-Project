@@ -180,6 +180,7 @@ void searchDoctor(const char* doctorName)
         {
             printf("Doctor's Information:\n%s", details);
 
+            if (strcmp(n,doctorName) ==0)
             while (fgets(details, SIZED, data) != NULL && strcmp(details, "\n") != 0)
             {
                 printf("%s", details);
