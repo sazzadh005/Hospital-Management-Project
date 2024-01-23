@@ -113,6 +113,15 @@ void receptionist_database()
     }
 }
 
+
+void searchNurse(const char *department)
+{
+    FILE *ndata;
+    ndata =fopen("doctors_data_base.csv","r");
+
+}
+
+
 void nurse_database()
 {
     printf("All Nurse's Information.\n\n");
@@ -131,6 +140,14 @@ void nurse_database()
 }
 
 
+void searchNurse(const char *department)
+{
+    FILE *ndata;
+    ndata =fopen("doctors_data_base.csv","r");
+
+}
+
+
 void staff()
 {
     printf("All Support Staff's Information\n\n");
@@ -146,6 +163,13 @@ void staff()
     }
     fclose(ndata);
     printf("\n");
+}
+
+
+void searchSupport_staff(const char *department)
+{
+    FILE *sdata;
+    sdata =fopen("doctors_data_base.csv", "r");
 }
 
 
