@@ -100,15 +100,6 @@ void login_pannel(char username[],char password[])
 
 void receptionist_database()
 {
-    printf("\n");
-    printf("Available in Day Shift (Saturday to Tuesday)");
-    printf("Name: Shafiq.\t\t\tName: Aklima.\t\t\tName: Simi\n");
-    printf("Designation: Receptionist.\tDesignation: Receptionist.\tDesignation: Receptionist.\n");
-    printf("Mob: 01980-634850\t\tMob: 01980-634851\t\tMob: 01980-634852\n\n");
-    printf("Available in Day Shift (Wednesday to Friday)");
-    printf("Name: Hridoy.\t\t\tName: Chaity.\t\t\tName: Anu\n");
-    printf("Designation: Receptionist.\tDesignation: Receptionist.\tDesignation: Receptionist.\n");
-    printf("Mob: 01980-634853\t\tMob: 01980-634854\t\tMob: 01980-634855\n");
 
 }
 
