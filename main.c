@@ -115,41 +115,7 @@ void receptionist_database()
 void nurse_database()
 {
 
-    printf("\n");
 
-    printf("Available in Day Shift (Saturday to Tuesday). Rest of the day in night shift.\n\n");
-
-    printf("Name: Barsha.\t\t\tName: Labiba.\t\t\tName: Muhaiminul\n");
-    printf("Designation: Nurse.\t\tDesignation: Nurse.\t\tDesignation: Nurse.\n");
-    printf("Department: Cardiology.\t\tDepartment: Gynecology.\t\tDepartment: Gastroenterology.\n");
-    printf("Mob: 01880-634850\t\tMob: 01880-634851\t\tMob: 01880-634852\n\n");
-
-    printf("Name: Nishad.\t\t\tName: Bibha.\t\t\tName: Shamim\n");
-    printf("Designation: Nurse.\t\tDesignation: Nurse.\t\tDesignation: Nurse.\n");
-    printf("Department: Cardiology.\t\tDepartment: Gynecology.\t\tDepartment: Gastroenterology.\n");
-    printf("Mob: 01880-634853\t\tMob: 01880-634854\t\tMob: 01880-634855\n\n");
-
-    printf("Name: Namrata.\t\t\tName: Saliha.\t\t\tName: Tahsin Ahmed\n");
-    printf("Designation: Nurse.\t\tDesignation: Nurse.\t\tDesignation: Nurse.\n");
-    printf("Department: General Surgery.\tDepartment: General Surgery.\tDepartment: Hematology.\n");
-    printf("Mob: 01880-634856\t\tMob: 01880-634857\t\tMob: 01880-634858\n\n");
-
-    printf("Available in Day Shift (Wednesday to Friday). Rest of the day in night shift.\n\n");
-
-    printf("Name: Sadiya.\t\t\tName: Rodela\t\t\tName: Sadia Naznin Nisha.\n");
-    printf("Designation: Nurse.\t\tDesignation: Nurse.\t\tDesignation: Nurse.\n");
-    printf("Department: Cardiology.\t\tDepartment: Cardiology.\t\tDepartment: Gastroenterology.\n");
-    printf("Mob: 01880-634859\t\tMob: 01880-634860\t\tMob: 01880-634861\n\n");
-
-    printf("Name: Rafsan.\t\t\tName: Nawrin\t\t\tName: Jennifer.\n");
-    printf("Designation: Nurse.\t\tDesignation: Nurse.\t\tDesignation: Nurse.\n");
-    printf("Department: Cardiology.\t\tDepartment: Gynecology.\t\tDepartment: Gastroenterology.\n");
-    printf("Mob: 01880-634862\t\tMob: 01880-634863\t\tMob: 01880-634864\n\n");
-
-    printf("Name: Atif.\t\t\tName: Nazia\t\t\tName: Shompa.\n");
-    printf("Designation: Nurse.\t\tDesignation: Nurse.\t\tDesignation: Nurse.\n");
-    printf("Department: General Surgery.\tDepartment: General Surgery.\tDepartment: Hematology.\n");
-    printf("Mob: 01880-634865\t\tMob: 01880-634866\t\tMob: 01880-634867\n\n");
 }
 
 
