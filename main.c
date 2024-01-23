@@ -165,7 +165,7 @@ void doctors_info()
 }
 
 
-void searchDoctor(char* doctorName)
+void searchDoctor(const char* doctorName)
 {
     FILE* data;
     data = fopen("doctors_data_base.csv", "r");
@@ -175,10 +175,26 @@ void searchDoctor(char* doctorName)
 
     while (fgets(details, SIZED, data) != NULL)
     {
+        char *n=strtok(details, " \n");
         if (strstr(details, doctorName) != NULL)
         {
             printf("Doctor's Information:\n%s", details);
+
+            while (fgets(details, SIZED, data) != NULL && strcmp(details, "\n") != 0)
+            {
+                printf("%s", details);
+            }
+
+            found = true;
+            break;
         }
+    }
+
+    if (!found) {
+        printf("Doctor with name '%s' not found.\n", doctorName);
+    }
+
+    fclose(data);
 }
 
 
