@@ -175,51 +175,189 @@ void searchSupport_staff(const char *department)
 
 void doctors_info()
 {
-    printf("All Doctor's Information\n\n");
+    printf("\nAll Doctor's Information\n\n");
     FILE *data;
 
     data=fopen("doctors_data_base.csv","r");
 
     char details[SIZED];
 
-    while (fgets(details, SIZED, data) != NULL) {
+    while(fgets(details,SIZED,data) != NULL)
+    {
         printf("%s", details);
     }
     fclose(data);
+    printf("\n");
 }
 
-
-void searchDoctor(const char* doctorName)
+void searchDoctor(const char *doctorName)
 {
-    FILE* data;
-    data = fopen("doctors_data_base.csv", "r");
+    FILE *data;
+    data=fopen("doctors_data_base.csv","r");
 
     char details[SIZED];
-    bool found = false;
+    bool found=false;
 
-    while (fgets(details, SIZED, data) != NULL)
+    while(fgets(details,SIZED,data) !=NULL)
     {
         char *n=strtok(details, " \n");
-        if (strstr(details, doctorName) != NULL)
+        while (n !=NULL)
         {
-            printf("Doctor's Information:\n%s", details);
-
             if (strcmp(n,doctorName) ==0)
-            while (fgets(details, SIZED, data) != NULL && strcmp(details, "\n") != 0)
             {
-                printf("%s", details);
+                printf("\nDoctor's Information:\n\n%s", details);
+                while(fgets(details,SIZED,data) !=NULL && strcmp(details,"\n") !=0)
+                {
+                    printf("%s",details);
+                }
+                found=true;
+                break;
             }
-
-            found = true;
+            n=strtok(NULL," \n");
+        }
+        if(found)
+        {
             break;
         }
     }
 
-    if (!found) {
-        printf("Doctor with name '%s' not found.\n", doctorName);
+    if(!found)
+    {
+        printf("\nDoctor with name '%s' not found.\n",doctorName);
+        printf("Please search again with correct name.\n");
     }
 
     fclose(data);
+}
+
+
+void addDoctor()
+{
+    char username[USERNAME_LENGHT], password[PASSWORD_LENGHT];
+
+    printf("\nTo add a new Doctor varify your login.\n");
+    input_login(username,password);
+
+    if (isAdmin(username, password)) {
+        if ((strcmp(username, "ADMIN") == 0 || strcmp(username, "admin") == 0) &&
+            (strcmp(password, "ADMINISTRATOR") == 0 || strcmp(password, "administrator") == 0))
+        {
+
+            char name[NAME_LENGHT], designation[ALL_LENGHT];
+            char department[ALL_LENGHT], qualification[ALL_LENGHT], speciality[ALL_LENGHT], chamberFloor[ALL_LENGHT];
+            char chamberRoom[ALL_LENGHT], chamberTime[ALL_LENGHT], offDay[ALL_LENGHT], contact[ALL_LENGHT];
+
+            printf("Enter name: ");
+            scanf("%s", name);
+
+            printf("Enter designation: ");
+            scanf("%s", designation);
+
+            printf("Enter department: ");
+            scanf("%s", department);
+
+            printf("Enter qualification: ");
+            scanf("%s", qualification);
+
+            printf("Enter speciality: ");
+            scanf("%s", speciality);
+
+            printf("Enter chamber floor: ");
+            scanf("%s", chamberFloor);
+
+            printf("Enter chamber room: ");
+            scanf("%s", chamberRoom);
+
+            printf("Enter chamber time: ");
+            scanf("%s", chamberTime);
+
+            printf("Enter off day: ");
+            scanf("%s", offDay);
+
+            printf("Enter contact: ");
+            scanf("%s", contact);
+
+            FILE *data;
+            data = fopen("doctors_data_base.csv", "a");
+
+            fprintf(data, "\nName: %s\nDesignation: %s\nDepartment: %s\nQualification: %s\nSpeciality: %s\nChamber Floor: %s\nChamber Room: %s\nChamber Time: %s\nOff Day: %s\nContact: %s\n", name, designation, department, qualification, speciality, chamberFloor, chamberRoom, chamberTime, offDay, contact);
+
+            fclose(data);
+            printf("Doctor '%s' added successfully.\n", name);
+        }
+        else
+        {
+            printf("Only admin can add a doctor. Contact the admin.\n");
+        }
+    }
+}
+
+
+
+void deleteDoctor()
+{
+    char username[USERNAME_LENGHT], password[PASSWORD_LENGHT];
+
+    printf("\nTo delete a Doctor, verify your login.\n");
+    input_login(username, password);
+
+    if (isAdmin(username, password)) {
+        char doctorName[NAME_LENGHT];
+        printf("Enter the Full Name of the doctor to be deleted: ");
+        scanf("%s", doctorName);
+
+        FILE* data = fopen("doctors_data_base.csv", "r");
+        if (data == NULL) {
+            printf("No File Found Here.\n");
+            return;
+        }
+
+        FILE* tempData = fopen("temp_data.csv", "w");
+        if (tempData == NULL) {
+            printf("No New File Found Here.\n");
+            fclose(data);
+            return;
+        }
+
+        char line[SIZED];
+        bool found = false;
+        bool deleteMode = false;
+
+        while (fgets(line, SIZED, data) != NULL)
+        {
+            if (strstr(line, doctorName) != NULL)
+            {
+                found = true;
+                deleteMode = true;
+            }
+
+            if (!deleteMode || (deleteMode && line[0]=='\n'))
+            {
+                fprintf(tempData, "%s", line);
+                deleteMode = false;
+            }
+        }
+
+
+
+        fclose(data);
+        fclose(tempData);
+
+        remove("doctors_data_base.csv");
+        rename("temp_data.csv", "doctors_data_base.csv");
+
+        if (found)
+        {
+            printf("Doctor '%s' deleted successfully.\n", doctorName);
+        } else
+        {
+            printf("Doctor '%s' not found.\n", doctorName);
+        }
+    }
+    else
+    {
+        printf("Only admin can delete a doctor. Contact with admin.\n");
+    }
 }
 
 
@@ -242,8 +380,6 @@ int main()
 
     login_pannel(username,password);
 
-    receptionist_database();
-    nurse_database();
     current_dateTime();
 
     return 0;
