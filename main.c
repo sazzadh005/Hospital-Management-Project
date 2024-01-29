@@ -148,20 +148,20 @@ void searchNurse(const char *department)
 }
 
 
-void staff()
+void support_staff()
 {
-    printf("All Support Staff's Information\n\n");
-    FILE *ndata;
+    printf("\nAll Support Staff's Information\n\n");
+    FILE *sdata;
 
-    ndata=fopen("support_staff_database.csv","r");
+    sdata=fopen("support_staff_database.csv","r");
 
-    char ndetails[SIZED];
+    char sdetails[SIZED];
 
-    while(fgets(ndetails,SIZED,ndata) !=NULL)
+    while(fgets(sdetails,SIZED,sdata) !=NULL)
     {
-        printf("%s",ndetails);
+        printf("%s",sdetails);
     }
-    fclose(ndata);
+    fclose(sdata);
     printf("\n");
 }
 
@@ -169,8 +169,29 @@ void staff()
 void searchSupport_staff(const char *department)
 {
     FILE *sdata;
-    sdata =fopen("doctors_data_base.csv", "r");
+    sdata =fopen("support_staff_database.csv", "r");
+
+    char sdetails[SIZED];
+    bool found =false;
+
+    while(fgets(sdetails, SIZED, sdata) !=NULL)
+    {
+        if(strstr(sdetails, department) !=NULL)
+        {
+            printf("\nSupport Staff's Information:\n\n%s",sdetails);
+            found = true;
+        }
+    }
+
+    if(!found)
+    {
+        printf("\nSupport Staff in department '%s' not found.\n",department);
+        printf("Please search again.\n");
+    }
+
+    fclose(sdata);
 }
+
 
 
 void doctors_info()
