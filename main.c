@@ -100,7 +100,7 @@ void login_pannel(char username[],char password[])
 
 void receptionist_database()
 {
-    printf("All Receptionist Information.\n\n");
+    printf("\nAll Receptionist Information.\n\n");
     FILE *rdata;
 
     rdata=fopen("receptionist_database.csv","r");
@@ -114,11 +114,44 @@ void receptionist_database()
 }
 
 
-void searchNurs(const char *department)
+void searchReceptionist(const char *receptionistName)
 {
-    FILE *ndata;
-    ndata =fopen("doctors_data_base.csv","r");
+    FILE *rdata;
+    rdata=fopen("receptionist_database.csv","r");
 
+    char details[SIZED];
+    bool found=false;
+
+    while(fgets(details,SIZED,rdata) !=NULL)
+    {
+        char* n=strtok(details, " \n");
+        while (n !=NULL)
+        {
+            if (strcmp(n,receptionistName) ==0)
+            {
+                printf("\nReceptionist's Information:\n\n%s", details);
+                while(fgets(details,SIZED,rdata) !=NULL && strcmp(details,"\n") !=0)
+                {
+                    printf("%s",details);
+                }
+                found=true;
+                break;
+            }
+            n=strtok(NULL," \n");
+        }
+        if(found)
+        {
+            break;
+        }
+    }
+
+    if(!found)
+    {
+        printf("\nReceptiontist with name '%s' not found.\n",receptionistName);
+        printf("Please search again with correct name.\n");
+    }
+
+    fclose(rdata);
 }
 
 
