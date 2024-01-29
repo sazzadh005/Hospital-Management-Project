@@ -114,7 +114,7 @@ void receptionist_database()
 }
 
 
-void searchNurse(const char *department)
+void searchNurs(const char *department)
 {
     FILE *ndata;
     ndata =fopen("doctors_data_base.csv","r");
@@ -124,18 +124,18 @@ void searchNurse(const char *department)
 
 void nurse_database()
 {
-    printf("All Nurse's Information.\n\n");
-    FILE *fdata;
+    printf("\nAll Nurse's Information.\n\n");
+    FILE *ndata;
 
-    fdata=fopen("nurses_database.csv","r");
+    ndata=fopen("nurses_database.csv","r");
 
     char fdetails[SIZED];
 
-    while(fgets(fdetails,SIZED,fdata) !=NULL)
+    while(fgets(fdetails,SIZED,ndata) !=NULL)
     {
         printf("%s",fdetails);
     }
-    fclose(fdata);
+    fclose(ndata);
     printf("\n");
 }
 
@@ -143,8 +143,27 @@ void nurse_database()
 void searchNurse(const char *department)
 {
     FILE *ndata;
-    ndata =fopen("doctors_data_base.csv","r");
+    ndata =fopen("nurses_database.csv","r");
 
+    char ndetails[SIZED];
+    bool found =false;
+
+    while(fgets(ndetails,SIZED,ndata) !=NULL)
+    {
+        if(strstr(ndetails, department) !=NULL)
+        {
+            printf("\nNurse's Information:\n\n%s",ndetails);
+            found = true;
+        }
+    }
+
+    if(!found)
+    {
+        printf("\nNurse in department '%s' not found.\n",department);
+        printf("Please search again.\n");
+    }
+
+    fclose(ndata);
 }
 
 
