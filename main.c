@@ -14,6 +14,7 @@
 #define MOBILE_LENGHT 15
 #define ALL_LENGHT 100
 
+bool isAdmin(char *user, char *pass);
 
 void current_dateTime()
 {
@@ -444,6 +445,23 @@ void patient_information()
  char blood_grp[10];
 
 
+}
+
+
+bool isAdmin(char *user, char *pass)
+{
+    char username[][USERNAME_LENGHT] = {"COMMON_USER", "common_user", "RECEPTION", "reception", "ADMIN", "admin"};
+    char password[][PASSWORD_LENGHT] = {"LOGIN", "login", "COMMON_USER", "common_user", "ADMINISTRATOR", "administrator"};
+    int size = sizeof(username) /sizeof(username[0]);
+
+    for (int i=0; i<size;i++)
+    {
+        if(strcmp(username[i],user)==0 && strcmp(password[i],pass)==0)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 int main()
