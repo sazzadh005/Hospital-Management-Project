@@ -14,6 +14,23 @@
 #define MOBILE_LENGHT 15
 #define ALL_LENGHT 100
 
+
+void current_dateTime();
+int administrator(char user[],char pass[]);
+void input_login(char username[],char password[]);
+void login_pannel(char username[],char password[]);
+void receptionist_database();
+void searchReceptionist(const char *receptionistName);
+void nurse_database();
+void searchNurse(const char *department);
+void support_staff();
+void searchSupport_staff(const char *department);
+void doctors_info();
+void searchDoctor(const char *doctorName);
+void addDoctor();
+void deleteDoctor();
+void admitPatient();
+void viewPatients();
 bool isAdmin(char *user, char *pass);
 
 void current_dateTime()
@@ -31,7 +48,7 @@ void current_dateTime()
     int minute=local_time.tm_min;
     int second=local_time.tm_sec;
 
-    printf("Admission Date & Time: %.2d-%.2d-%d  &  %.2d:%.2d:%.2d",date,month,year,hour,minute,second);
+    sprintf(date_time,"%.2d-%.2d-%d  &  %.2d:%.2d:%.2d",date,month,year,hour,minute,second);
 }
 
 int administrator(char user[],char pass[])
@@ -435,24 +452,65 @@ void deleteDoctor()
 }
 
 
-void patient_information()
+struct Patient
 {
- char name[NAME_LENGHT];
- char gurdian_name[NAME_LENGHT];
- char gurdian_relation[NAME_LENGHT];
- int age;
- int mobile;
- char blood_grp[10];
+    int id;
+    char name[NAME_LENGHT];
+    int age;
+    char blood_grp[10];
+    char guardian_name[NAME_LENGHT];
+    char guardian_relation[NAME_LENGHT];
+    int mobile;
+    char problem[ALL_LENGHT];
+    char date_time;
+    struct Patient* next;
+};
+struct Patient *head=NULL;
+int lastPatientId = 1;
 
+void admitPatient(struct Patient** head)
+{
+    struct Patient* newPatient = createPatient();
 
+    printf("Enter patient details:\n");
+    printf("Name: ");
+    scanf("%s", newPatient->name);
+    printf("Age: ");
+    scanf("%d", &newPatient->age);
+    printf("Blood Group: ");
+    scanf("%s", newPatient->blood_grp);
+    printf("Guardian Name: ");
+    scanf("%s", newPatient->guardian_name);
+    printf("Guardian Relation: ");
+    scanf("%s", newPatient->guardian_relation);
+    printf("Mobile: ");
+    scanf("%d", &newPatient->mobile);
+    printf("Problem: ");
+    scanf(" %s", newPatient->problem);
+
+    current_dateTime(newPatient->date_time);
+    newPatient->next = *head;
+    *head = newPatient;
+
+    FILE* patientsFile = fopen("patients.csv", "a");
+    fscanf(patientsFile, "ID: %d\nName: %s\nAge: %d\nBlood Group: %s\nGuardian Name: %s\nGuardian Relation: %s\nContact: %d\nProblem Details: %s\nAdmission Date & Time: %s\n\n",
+            newPatient->id, newPatient->name, newPatient->age, newPatient->blood_grp, newPatient->guardian_name, newPatient->guardian_relation,
+            newPatient->mobile, newPatient->problem, newPatient->date_time);
+
+    fclose(patientsFile);
+
+    printf("Patient admitted successfully. Patient ID: %d\n%s\n\n",newPatient->id,newPatient->date_time);
+    lastPatientId++;
 }
+
+
 
 
 bool isAdmin(char *user, char *pass)
 {
-    char username[][USERNAME_LENGHT] = {"COMMON_USER", "common_user", "RECEPTION", "reception", "ADMIN", "admin"};
-    char password[][PASSWORD_LENGHT] = {"LOGIN", "login", "COMMON_USER", "common_user", "ADMINISTRATOR", "administrator"};
-    int size = sizeof(username) /sizeof(username[0]);
+    char username[][USERNAME_LENGHT]={"COMMON_USER","common_user","RECEPTION","reception","ADMIN","admin"};
+    char password[][PASSWORD_LENGHT]={"LOGIN","login","COMMON_USER","common_user","ADMINISTRATOR","administrator"};
+    int size =sizeof(username)/sizeof(username[0]);
 
     for (int i=0; i<size;i++)
     {
@@ -464,14 +522,70 @@ bool isAdmin(char *user, char *pass)
     return false;
 }
 
-int main()
-{
+int main() {
     char username[USERNAME_LENGHT];
     char password[PASSWORD_LENGHT];
 
-    login_pannel(username,password);
+    login_pannel(username, password);
 
-    current_dateTime();
+    int choice;
+    do {
+        printf("\nHospital Management System\n");
+        printf("1. Admit Patient\n");
+        printf("2. View Admitted Patients\n");
+        printf("3. Receptionist\n");
+        printf("4. Search Receptionist\n");
+        printf("5. Doctors\n");
+        printf("6. Search Doctors\n");
+        printf("7. Add Doctors\n");
+        printf("8. Delete Doctors\n");
+        printf("9. Nurse's\n");
+        printf("10. Search Nurse's\n");
+        printf("11. Support Staff\n");
+        printf("12. Search Support Staff\n");
+        printf("13. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+    switch (choice)
+    {
+        case 1:
+            admitPatient(head);
+            break;
+        case 2:
+            viewPatients(head);
+            break;
+        case 3:
+            receptionist_database();
+            char option;
+            printf("Do you want to search any Receptionist?\tIf yes press 'Y' if no press 'N'\n");
+            scanf("%c", &option);
+            if (option == 'Y' || option == 'y') {
+                char name[NAME_LENGHT];
+                printf("Enter Receptionist Name: ");
+                scanf("%s", name);
+                searchReceptionist(name);
+                printf("\n");
+            }
+            break;
+        case 4:
+            char option1;
+            char name1[NAME_LENGHT];
+            printf("Enter Receptionist Name: ");
+            scanf("%s", name1);
+            searchReceptionist(name1);
+            printf("\nDo you want to search another?\tIf yes press 'Y' if no press 'N'\n");
+            scanf("%c",&option1);
+            if (option1 == 'Y' || option1 == 'y') {
+                char name2[NAME_LENGHT];
+                printf("Enter Receptionist Name: ");
+                scanf("%s", name2);
+                searchReceptionist(name2);
+                printf("\n");
+            }
+            break;
+
+
 
     return 0;
 }
