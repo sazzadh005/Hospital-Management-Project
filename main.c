@@ -504,6 +504,23 @@ void admitPatient(struct Patient** head)
 }
 
 
+void patientDatabase()
+{
+    printf("\nAll Admitted Patient Information\n\n");
+    FILE* patientsFile;
+
+    patientsFile=fopen("patients.csv", "r");
+
+    char pdetails[SIZED];
+
+    while(fgets(pdetails,SIZED,patientsFile) !=NULL)
+    {
+        printf("%s",pdetails);
+    }
+    fclose(patientsFile);
+    printf("\n");
+}
+
 
 
 bool isAdmin(char *user, char *pass)
