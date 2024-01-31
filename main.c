@@ -466,7 +466,7 @@ struct Patient
     struct Patient* next;
 };
 struct Patient *head=NULL;
-int lastPatientId = 1;
+int lastPatientId = 200;
 
 void admitPatient(struct Patient** head)
 {
@@ -501,24 +501,6 @@ void admitPatient(struct Patient** head)
 
     printf("Patient admitted successfully. Patient ID: %d\n%s\n\n",newPatient->id,newPatient->date_time);
     lastPatientId++;
-}
-
-
-void patientDatabase()
-{
-    printf("\nAll Admitted Patient Information\n\n");
-    FILE* patientsFile;
-
-    patientsFile=fopen("patients.csv", "r");
-
-    char pdetails[SIZED];
-
-    while(fgets(pdetails,SIZED,patientsFile) !=NULL)
-    {
-        printf("%s",pdetails);
-    }
-    fclose(patientsFile);
-    printf("\n");
 }
 
 
@@ -563,44 +545,6 @@ int main() {
         printf("13. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
-
-    switch (choice)
-    {
-        case 1:
-            admitPatient(head);
-            break;
-        case 2:
-            viewPatients(head);
-            break;
-        case 3:
-            receptionist_database();
-            char option;
-            printf("Do you want to search any Receptionist?\tIf yes press 'Y' if no press 'N'\n");
-            scanf("%c", &option);
-            if (option == 'Y' || option == 'y') {
-                char name[NAME_LENGHT];
-                printf("Enter Receptionist Name: ");
-                scanf("%s", name);
-                searchReceptionist(name);
-                printf("\n");
-            }
-            break;
-        case 4:
-            char option1;
-            char name1[NAME_LENGHT];
-            printf("Enter Receptionist Name: ");
-            scanf("%s", name1);
-            searchReceptionist(name1);
-            printf("\nDo you want to search another?\tIf yes press 'Y' if no press 'N'\n");
-            scanf("%c",&option1);
-            if (option1 == 'Y' || option1 == 'y') {
-                char name2[NAME_LENGHT];
-                printf("Enter Receptionist Name: ");
-                scanf("%s", name2);
-                searchReceptionist(name2);
-                printf("\n");
-            }
-            break;
 
 
 
