@@ -236,28 +236,31 @@ void support_staff()
     printf("\n");
 }
 
-
+//need to be updated
 void searchSupport_staff(const char *department)
 {
     FILE *sdata;
-    sdata =fopen("support_staff_database.csv", "r");
+    sdata = fopen("support_staff_database.csv","r");
 
-    char sdetails[SIZED];
+    char name[NAME_LENGHT],designation[DESIGNATION_LENGHT],contact[MOBILE_LENGHT],availableTime[ALL_LENGHT],offDay[ALL_LENGHT];
     bool found =false;
 
-    while(fgets(sdetails,SIZED,sdata) !=NULL)
+    while (fscanf(sdata, "Name: %[^\n]\nDesignation: %[^\n]\nDepartment: %[^\n]\nContact: %[^\n]\nAvailable Time: %[^\n]\nOff Day: %[^\n]\n",
+                  name, designation, department, contact, availableTime, offDay) ==6)
     {
-        if(strstr(sdetails,department) !=NULL)
-        {
-            printf("\nSupport Staff's Information:\n\n%s",sdetails);
-            found =true;
-        }
+        printf("\nSupport Staff's Information of '%s':\n\n",department);
+        printf("Name: %s\n",name);
+        printf("Designation: %s\n",designation);
+        printf("Department: %s\n",department);
+        printf("Contact: %s\n",contact);
+        printf("Available Time: %s\n",availableTime);
+        printf("Off Day: %s\n",offDay);
+        found =true;
     }
 
-    if(!found)
+    if (!found)
     {
-        printf("\nSupport Staff in department '%s' not found.\n",department);
-        printf("Please search again.\n");
+        printf("\nSupport Staff in department '%s' not found.\nPlease search again.\n", department);
     }
 
     fclose(sdata);
@@ -276,7 +279,7 @@ void doctors_info()
 
     while(fgets(details,SIZED,data) != NULL)
     {
-        printf("%s", details);
+        printf("%s",details);
     }
     fclose(data);
     printf("\n");
@@ -458,8 +461,6 @@ void deleteDoctor()
             }
         }
 
-
-
         fclose(data);
         fclose(tempData);
 
@@ -498,14 +499,13 @@ struct Patient *head1=NULL;
 int lastPatientId = 1;
 
 
-struct Patient* createPatient()
+struct Patient *createPatient()
 {
-    struct Patient* newPatient = (struct Patient*)malloc(sizeof(struct Patient));
+    struct Patient *newPatient = (struct Patient *)malloc(sizeof(struct Patient));
     newPatient->id = lastPatientId++;
     newPatient->next = NULL;
     return newPatient;
 }
-
 
 void admitPatient(struct Patient *head)
 {
@@ -525,13 +525,14 @@ void admitPatient(struct Patient *head)
     printf("Mobile: ");
     scanf("%d",&newPatient->mobile);
     printf("Problem: ");
-    scanf(" %s",newPatient->problem);
+    scanf("%s",newPatient->problem);
 
     current_dateTime(newPatient->date_time);
-    newPatient->next=head1;
-    head1=newPatient;
 
-    FILE* patientsFile = fopen("patients.csv", "a");
+    newPatient->next = head1;
+    head1 = newPatient;
+
+    FILE *patientsFile = fopen("patients.csv", "a");
     fprintf(patientsFile, "ID: %d\nName: %s\nAge: %d\nBlood Group: %s\nGuardian Name: %s\nGuardian Relation: %s\nContact: %d\nProblem Details: %s\nAdmitting Date & Time: %s\n\n",
             newPatient->id, newPatient->name, newPatient->age, newPatient->blood_grp, newPatient->guardian_name, newPatient->guardian_relation,
             newPatient->mobile, newPatient->problem, newPatient->date_time);
@@ -544,16 +545,15 @@ void admitPatient(struct Patient *head)
 
 void freeMemory()
 {
-    struct Patient *current=head1;
+    struct Patient *current = head1;
     struct Patient *next;
     while (current != NULL)
     {
         next = current->next;
         free(current);
-        current=next;
+        current = next;
     }
 }
-
 
 void patientDatabase()
 {
@@ -627,7 +627,7 @@ int main() {
             char option;
             printf("Do you want to search any Receptionist?\tIf yes press 'Y' if no press 'N'\n");
             scanf(" %c", &option);
-            if (option == 'Y' || option == 'y') {
+            if (option=='Y' || option=='y') {
                 char name[NAME_LENGHT];
                 printf("Enter Receptionist Name: ");
                 scanf("%s", name);
@@ -639,18 +639,18 @@ int main() {
             {
                 char name1[NAME_LENGHT];
                 printf("Enter Receptionist Name: ");
-                scanf("%s", name1);
+                scanf("%s",name1);
                 searchReceptionist(name1);
 
                 char option1;
                 printf("\nDo you want to search another?\tIf yes press 'Y' if no press 'N'\n");
-                scanf(" %c", &option1);
+                scanf("%c",&option1);
 
-                if (option1 == 'Y' || option1 == 'y')
+                if (option1=='Y' || option1=='y')
                 {
                     char name2[NAME_LENGHT];
                     printf("Enter Receptionist Name: ");
-                    scanf("%s", name2);
+                    scanf("%s",name2);
                     searchReceptionist(name2);
                     printf("\n");
                 }
@@ -661,11 +661,11 @@ int main() {
             doctors_info();
             char option2;
             printf("Do you want to search any Doctor?\tIf yes press 'Y' if no press 'N'\n");
-            scanf(" %c", &option2);
-            if (option2 == 'Y' || option2 == 'y') {
+            scanf("%c",&option2);
+            if (option2=='Y' || option2=='y') {
                 char name[NAME_LENGHT];
                 printf("Enter Doctor Name: ");
-                scanf("%s", name);
+                scanf("%s",name);
                 searchDoctor(name);
                 printf("\n");
             }
@@ -676,11 +676,11 @@ int main() {
             char name3[NAME_LENGHT];
             char option3;
             printf("Enter Doctor Name: ");
-            scanf("%s", name3);
+            scanf("%s",name3);
             searchDoctor(name3);
             printf("\nDo you want to search another?\tIf yes press 'Y' if no press 'N'\n");
-            scanf(" %c", &option3);
-            if (option3 == 'Y' || option3 == 'y') {
+            scanf("%c",&option3);
+            if (option3=='Y' || option3=='y') {
                 char name4[NAME_LENGHT];
                 printf("Enter Doctor Name: ");
                 scanf("%s", name4);
@@ -695,7 +695,7 @@ int main() {
             char option4;
             printf("\nDo you want to add another?\tIf yes press 'Y' if no press 'N'\n");
             scanf(" %c", &option4);
-            if (option4 == 'Y' || option4 == 'y') {
+            if (option4=='Y' || option4=='y') {
                 addDoctor();
             }
             break;
@@ -709,7 +709,7 @@ int main() {
             char option5;
             printf("Do you want to search any Nurse?\tIf yes press 'Y' if no press 'N'\n");
             scanf(" %c", &option5);
-            if (option5 == 'Y' || option5 == 'y') {
+            if (option5=='Y' || option5=='y') {
                 char department[DEPARTMENT_LENGHT];
                 printf("Enter Nurse Department: ");
                 scanf("%s", department);
@@ -742,12 +742,12 @@ int main() {
             support_staff();
             char option7;
             printf("Do you want to search any Support Staff?\tIf yes press 'Y' if no press 'N'\n");
-            scanf(" %c", &option7);
-            if (option7 == 'Y' || option7 == 'y')
+            scanf("%c",&option7);
+            if (option7=='Y' || option7=='y')
             {
                 char department3[DEPARTMENT_LENGHT];
                 printf("Enter Support Staff Department: ");
-                scanf("%s", department3);
+                scanf("%s",department3);
                 searchSupport_staff(department3);
                 printf("\n");
             }
@@ -762,7 +762,7 @@ int main() {
             searchSupport_staff(department4);
             printf("\nDo you want to search another?\tIf yes press 'Y' if no press 'N'\n");
             scanf(" %c",&option8);
-            if (option8=='Y' || option8 =='y')
+            if (option8=='Y' || option8=='y')
             {
                 char department5[DEPARTMENT_LENGHT];
                 printf("Enter Support Staff Department: ");
