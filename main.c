@@ -362,7 +362,7 @@ void addDoctor()
 
             printf("Enter designation: ");
             scanf("%s",newDoctor->designation);
-
+            getchar();
             printf("Enter department: ");
             scanf("%s",newDoctor->department);
 
@@ -507,7 +507,7 @@ struct Patient *createPatient()
     return newPatient;
 }
 
-void admitPatient(struct Patient *head)
+void admitPatient(struct Patient *head1)
 {
     struct Patient *newPatient=createPatient();
 
@@ -573,7 +573,7 @@ void patientDatabase()
 }
 
 
-bool isAdmin(char *user, char *pass)
+int isAdmin(char *user, char *pass)
 {
     char username[][USERNAME_LENGHT]={"COMMON_USER","common_user","RECEPTION","reception","ADMIN","admin"};
     char password[][PASSWORD_LENGHT]={"LOGIN","login","COMMON_USER","common_user","ADMINISTRATOR","administrator"};
@@ -583,10 +583,10 @@ bool isAdmin(char *user, char *pass)
     {
         if(strcmp(username[i],user)==0 && strcmp(password[i],pass)==0)
         {
-            return true;
+            return 0;
         }
     }
-    return false;
+    return 1;
 }
 
 int main() {
@@ -617,7 +617,7 @@ int main() {
     switch (choice)
     {
         case 1:
-            admitPatient(head);
+            admitPatient(head1);
             break;
         case 2:
             patientDatabase();
