@@ -776,22 +776,14 @@ int main() {
             break;
         }
         case 13:
-            printf("Loggin Out the Hospital Management System. Thank you. Have a nice day.");
+            printf("\n\nLoggin Out the Hospital Management System. Thank you. Have a nice day.\n\n");
             break;
         default:
-            printf("Invalid choice. Please try again.\n");
+            printf("\nInvalid choice. Please try again.\n");
             break;
         }
     }
     while (choice != 13);
-
-    struct Patient *current = head;
-    while (current != NULL)
-    {
-        struct Patient *next = current->next;
-        free(current);
-        current=next;
-    }
 
 
     return 0;
