@@ -33,23 +33,6 @@ void admitPatient();
 void viewPatients();
 bool isAdmin(char *user, char *pass);
 
-void current_dateTime(char *date_time)
-{
-    time_t t;
-    time(&t);
-
-    struct tm*timeinfo=localtime(&t);
-    struct tm local_time= *timeinfo;
-
-    int date=local_time.tm_mday;
-    int month=local_time.tm_mon+1;
-    int year=local_time.tm_year+1900;
-    int hour=local_time.tm_hour;
-    int minute=local_time.tm_min;
-    int second=local_time.tm_sec;
-
-    sprintf(date_time,"%.2d-%.2d-%d  &  %.2d:%.2d:%.2d",date,month,year,hour,minute,second);
-}
 
 int administrator(char user[],char pass[])
 {
@@ -479,6 +462,26 @@ void deleteDoctor()
     {
         printf("Only admin can delete a doctor. Contact with admin.\n");
     }
+}
+
+
+
+void current_dateTime(char *date_time)
+{
+    time_t t;
+    time(&t);
+
+    struct tm*timeinfo=localtime(&t);
+    struct tm local_time= *timeinfo;
+
+    int date=local_time.tm_mday;
+    int month=local_time.tm_mon+1;
+    int year=local_time.tm_year+1900;
+    int hour=local_time.tm_hour;
+    int minute=local_time.tm_min;
+    int second=local_time.tm_sec;
+
+    sprintf(date_time,"%.2d-%.2d-%d  &  %.2d:%.2d:%.2d",date,month,year,hour,minute,second);
 }
 
 
