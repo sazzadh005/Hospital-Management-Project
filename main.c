@@ -29,9 +29,15 @@ void doctors_info();
 void searchDoctor(const char *doctorName);
 void addDoctor();
 void deleteDoctor();
-void admitPatient();
 void viewPatients();
 bool isAdmin(char *user,char *pass);
+void makePayment();
+void searchBillById(int patientId);
+void admitPatient();
+struct Patient *createPatient();
+int LastPatientId();
+void addBilling(struct Patient *patient);
+void calculateTotal();
 
 
 int administrator(char user[],char pass[])
@@ -153,6 +159,111 @@ void searchReceptionist(const char *receptionistName)
     fclose(rdata);
 }
 
+void addReceptionist()
+{
+    char username[USERNAME_LENGHT],password[PASSWORD_LENGHT];
+
+    printf("\nTo add a new Receptionist, verify your login.\n");
+    input_login(username,password);
+
+    if (isAdmin(username, password))
+        {
+        char name[NAME_LENGHT],designation[DESIGNATION_LENGHT],department[DEPARTMENT_LENGHT];
+        char contact[MOBILE_LENGHT],availableTime[ALL_LENGHT],offDay[ALL_LENGHT];
+
+        printf("Enter name: ");
+        scanf("%s",name);
+
+        printf("Enter designation: ");
+        scanf("%s",designation);
+
+        printf("Enter department: ");
+        scanf("%s",department);
+
+        printf("Enter contact: ");
+        scanf("%s",contact);
+
+        FILE *rdata;
+        rdata=fopen("receptionist_database.csv","a");
+
+        fprintf(rdata,"Name: %s\nDesignation: %s\nDepartment: %s\nContact: %s\n",name,designation,department,contact);
+
+        fclose(rdata);
+        printf("Receptionist '%s' added successfully.\n",name);
+    }
+    else
+    {
+        printf("Only admin can add a receptionist. Contact the admin.\n");
+    }
+}
+
+void deleteReceptionist()
+{
+    char username[USERNAME_LENGHT],password[PASSWORD_LENGHT];
+
+    printf("\nTo delete a Receptionist, verify your login.\n");
+    input_login(username,password);
+
+    if (isAdmin(username,password))
+    {
+        char receptionistName[NAME_LENGHT];
+        printf("Enter the Full Name of the receptionist to be deleted: ");
+        scanf("%s",receptionistName);
+
+        FILE *rdata=fopen("receptionist_database.csv","r");
+        if (rdata==NULL) {
+            printf("No File Found Here.\n");
+            return;
+        }
+
+        FILE *tempData=fopen("temp_receptionist_data.csv","w");
+        if(tempData==NULL)
+        {
+            printf("No New File Found Here.\n");
+            fclose(rdata);
+            return;
+        }
+
+        char line[SIZED];
+        bool found=false;
+        bool deleteMode=false;
+
+        while(fgets(line,SIZED,rdata) !=NULL)
+        {
+            if(strstr(line,receptionistName) !=NULL)
+            {
+                found=true;
+                deleteMode=true;
+            }
+
+            if(!deleteMode || (deleteMode && line[0]=='\n'))
+            {
+                fprintf(tempData,"%s",line);
+                deleteMode=false;
+            }
+        }
+
+        fclose(rdata);
+        fclose(tempData);
+
+        remove("receptionist_database.csv");
+        rename("temp_receptionist_data.csv","receptionist_database.csv");
+
+        if(found)
+        {
+            printf("Receptionist '%s' deleted successfully.\n",receptionistName);
+        }
+        else
+        {
+            printf("Receptionist '%s' not found.\n",receptionistName);
+        }
+    }
+    else
+    {
+        printf("Only admin can delete a receptionist. Contact the admin.\n");
+    }
+}
+
 
 void nurse_database()
 {
@@ -197,6 +308,118 @@ void searchNurse(const char *department)
 }
 
 
+void addNurse()
+{
+    char username[USERNAME_LENGHT],password[PASSWORD_LENGHT];
+
+    printf("\nTo add a new Nurse, verify your login.\n");
+    input_login(username,password);
+
+    if(isAdmin(username,password))
+    {
+        char name[NAME_LENGHT],designation[DESIGNATION_LENGHT],department[DEPARTMENT_LENGHT];
+        char contact[MOBILE_LENGHT],availableTime[ALL_LENGHT],offDay[ALL_LENGHT];
+
+        printf("Enter name: ");
+        scanf("%s",name);
+
+        printf("Enter designation: ");
+        scanf("%s",designation);
+
+        printf("Enter department: ");
+        scanf("%s",department);
+
+        printf("Enter contact: ");
+        scanf("%s",contact);
+
+        printf("Enter available time: ");
+        scanf("%s",availableTime);
+
+        printf("Enter off day: ");
+        scanf("%s",offDay);
+
+        FILE *ndata;
+        ndata=fopen("nurses_database.csv","a");
+
+        fprintf(ndata,"Name: %s\nDesignation: %s\nDepartment: %s\nContact: %s\nAvailable Time: %s\nOff Day: %s\n",
+                name,designation,department,contact,availableTime,offDay);
+
+        fclose(ndata);
+        printf("Nurse '%s' added successfully.\n",name);
+    }
+    else
+    {
+        printf("Only admin can add a nurse. Contact the admin.\n");
+    }
+}
+
+void deleteNurse()
+{
+    char username[USERNAME_LENGHT],password[PASSWORD_LENGHT];
+
+    printf("\nTo delete a Nurse, verify your login.\n");
+    input_login(username,password);
+
+    if (isAdmin(username,password))
+    {
+        char nurseName[NAME_LENGHT];
+        printf("Enter the Full Name of the nurse to be deleted: ");
+        scanf("%s",nurseName);
+
+        FILE *ndata=fopen("nurses_database.csv","r");
+        if (ndata==NULL) {
+            printf("No File Found Here.\n");
+            return;
+        }
+
+        FILE *tempData=fopen("temp_nurse_data.csv","w");
+        if (tempData==NULL)
+        {
+            printf("No New File Found Here.\n");
+            fclose(ndata);
+            return;
+        }
+
+        char line[SIZED];
+        bool found=false;
+        bool deleteMode=false;
+
+        while(fgets(line,SIZED,ndata) !=NULL)
+        {
+            if(strstr(line,nurseName) !=NULL)
+            {
+                found=true;
+                deleteMode=true;
+            }
+
+            if(!deleteMode ||(deleteMode && line[0]=='\n'))
+            {
+                fprintf(tempData,"%s",line);
+                deleteMode=false;
+            }
+        }
+        fclose(ndata);
+        fclose(tempData);
+
+        remove("nurses_database.csv");
+        rename("temp_nurse_data.csv","nurses_database.csv");
+
+        if(found)
+        {
+            printf("Nurse '%s' deleted successfully.\n",nurseName);
+        }
+        else
+        {
+            printf("Nurse '%s' not found.\n",nurseName);
+        }
+    }
+    else
+    {
+        printf("Only admin can delete a nurse. Contact the admin.\n");
+    }
+}
+
+
 void support_staff()
 {
     printf("\nAll Support Staff's Information\n\n");
@@ -213,34 +436,143 @@ void support_staff()
     printf("\n");
 }
 
-//need to be updated
+
 void searchSupport_staff(const char *department)
 {
     FILE *sdata;
     sdata=fopen("support_staff_database.csv","r");
 
-    char name[NAME_LENGHT],designation[DESIGNATION_LENGHT],contact[MOBILE_LENGHT],availableTime[ALL_LENGHT],offDay[ALL_LENGHT];
-    bool found=false;
-
-    while(fscanf(sdata, "Name: %[^\n]\nDesignation: %[^\n]\nDepartment: %[^\n]\nContact: %[^\n]\nAvailable Time: %[^\n]\nOff Day: %[^\n]\n",
-                  name, designation, department, contact, availableTime, offDay) ==6)
+    char sdetails[SIZED];
+    bool found =false;
+    while(fgets(sdetails,SIZED,sdata) !=NULL)
     {
-        printf("\nSupport Staff's Information of '%s':\n\n",department);
-        printf("Name: %s\n",name);
-        printf("Designation: %s\n",designation);
-        printf("Department: %s\n",department);
-        printf("Contact: %s\n",contact);
-        printf("Available Time: %s\n",availableTime);
-        printf("Off Day: %s\n",offDay);
-        found=true;
+        if(strstr(sdetails,department) !=NULL)
+        {
+            printf("\nSupport Staff Information:\n\n%s",sdetails);
+            found = true;
+        }
     }
+
     if(!found)
     {
-        printf("\nSupport Staff in department '%s' not found.\nPlease search again.\n", department);
+        printf("\nSupport Staff in department '%s' not found.\n",department);
+        printf("Please search again.\n");
     }
+
     fclose(sdata);
 }
 
+void addSupport_staff()
+{
+    char username[USERNAME_LENGHT],password[PASSWORD_LENGHT];
+
+    printf("\nTo add a new Support Staff, verify your login.\n");
+    input_login(username,password);
+
+    if (isAdmin(username,password))
+    {
+        char name[NAME_LENGHT],designation[DESIGNATION_LENGHT],department[DEPARTMENT_LENGHT];
+        char contact[MOBILE_LENGHT],availableTime[ALL_LENGHT],offDay[ALL_LENGHT];
+
+        printf("Enter name: ");
+        scanf("%s",name);
+
+        printf("Enter designation: ");
+        scanf("%s",designation);
+
+        printf("Enter department: ");
+        scanf("%s",department);
+
+        printf("Enter contact: ");
+        scanf("%s",contact);
+
+        printf("Enter available time: ");
+        scanf("%s",availableTime);
+
+        printf("Enter off day: ");
+        scanf("%s",offDay);
+
+        FILE *sdata;
+        sdata=fopen("support_staff_database.csv","a");
+
+        fprintf(sdata,"Name: %s\nDesignation: %s\nDepartment: %s\nContact: %s\nAvailable Time: %s\nOff Day: %s\n",
+                name,designation,department,contact,availableTime,offDay);
+
+        fclose(sdata);
+        printf("Support Staff '%s' added successfully.\n",name);
+    }
+    else
+    {
+        printf("Only admin can add a support staff. Contact the admin.\n");
+    }
+}
+
+void deleteSupport_staff()
+{
+    char username[USERNAME_LENGHT],password[PASSWORD_LENGHT];
+
+    printf("\nTo delete a Support Staff, verify your login.\n");
+    input_login(username,password);
+
+    if (isAdmin(username,password))
+    {
+        char StaffName[NAME_LENGHT];
+        printf("Enter the Full Name of the support staff to be deleted: ");
+        scanf("%s",StaffName);
+
+        FILE *sdata=fopen("support_staff_database.csv","r");
+        if(sdata==NULL)
+        {
+            printf("No File Found Here.\n");
+            return;
+        }
+
+        FILE *tempData=fopen("temp_support_staff_data.csv", "w");
+        if (tempData==NULL)
+        {
+            printf("No New File Found Here.\n");
+            fclose(sdata);
+            return;
+        }
+        char line[SIZED];
+        bool found=false;
+        bool deleteMode=false;
+
+        while(fgets(line,SIZED,sdata) !=NULL)
+        {
+            if(strstr(line,StaffName) !=NULL)
+            {
+                found=true;
+                deleteMode=true;
+            }
+
+            if(!deleteMode || (deleteMode && line[0]=='\n'))
+            {
+                fprintf(tempData,"%s",line);
+                deleteMode=false;
+            }
+        }
+
+        fclose(sdata);
+        fclose(tempData);
+
+        remove("support_staff_database.csv");
+        rename("temp_support_staff_data.csv","support_staff_database.csv");
+
+        if (found)
+        {
+            printf("Support Staff '%s' deleted successfully.\n",StaffName);
+        }
+        else
+        {
+            printf("Support Staff '%s' not found.\n",StaffName);
+        }
+    }
+    else
+    {
+        printf("Only admin can delete a support staff. Contact the admin.\n");
+    }
+}
 
 
 void doctors_info()
@@ -368,45 +700,47 @@ void addDoctor()
 
 void deleteDoctor()
 {
-    char username[USERNAME_LENGHT], password[PASSWORD_LENGHT];
+    char username[USERNAME_LENGHT],password[PASSWORD_LENGHT];
 
     printf("\nTo delete a Doctor, verify your login.\n");
-    input_login(username, password);
+    input_login(username,password);
 
-    if (isAdmin(username, password)) {
+    if (isAdmin(username,password))
+    {
         char doctorName[NAME_LENGHT];
         printf("Enter the Full Name of the doctor to be deleted: ");
-        scanf("%s", doctorName);
+        scanf("%s",doctorName);
 
-        FILE* data = fopen("doctors_data_base.csv", "r");
-        if (data == NULL) {
+        FILE* data=fopen("doctors_data_base.csv","r");
+        if(data==NULL) {
             printf("No File Found Here.\n");
             return;
         }
 
-        FILE* tempData = fopen("temp_data.csv", "w");
-        if (tempData == NULL) {
+        FILE* tempData=fopen("temp_data.csv","w");
+        if (tempData==NULL)
+        {
             printf("No New File Found Here.\n");
             fclose(data);
             return;
         }
 
         char line[SIZED];
-        bool found = false;
-        bool deleteMode = false;
+        bool found=false;
+        bool deleteMode=false;
 
-        while (fgets(line, SIZED, data) != NULL)
+        while(fgets(line,SIZED,data) !=NULL)
         {
-            if (strstr(line, doctorName) != NULL)
+            if(strstr(line,doctorName) !=NULL)
             {
-                found = true;
-                deleteMode = true;
+                found=true;
+                deleteMode=true;
             }
 
             if (!deleteMode || (deleteMode && line[0]=='\n'))
             {
-                fprintf(tempData, "%s", line);
-                deleteMode = false;
+                fprintf(tempData,"%s",line);
+                deleteMode=false;
             }
         }
 
@@ -414,14 +748,15 @@ void deleteDoctor()
         fclose(tempData);
 
         remove("doctors_data_base.csv");
-        rename("temp_data.csv", "doctors_data_base.csv");
+        rename("temp_data.csv","doctors_data_base.csv");
 
         if (found)
         {
-            printf("Doctor '%s' deleted successfully.\n", doctorName);
-        } else
+            printf("Doctor '%s' deleted successfully.\n",doctorName);
+        }
+        else
         {
-            printf("Doctor '%s' not found.\n", doctorName);
+            printf("Doctor '%s' not found.\n",doctorName);
         }
     }
     else
@@ -441,6 +776,16 @@ void current_dateTime(char *date_time)
 }
 
 
+struct Billing
+{
+    float operation;
+    float medicine;
+    float checkup;
+    float doctorVisit;
+    float wardCabin;
+    float total;
+};
+
 struct Patient
 {
     int id;
@@ -453,27 +798,75 @@ struct Patient
     char problem[ALL_LENGHT];
     char refDoctor[ALL_LENGHT];
     char date_time[SIZED];
+    struct Billing bill;
     struct Patient* next;
 };
 struct Patient *head1=NULL;
 
+void calculateTotal(struct Billing *bill)
+{
+    bill->total=bill->operation+bill->medicine+bill->checkup+bill->doctorVisit+bill->wardCabin;
+}
+
+void addBilling(struct Patient *patient)
+{
+    int patientId;
+    printf("\nEnter the Patient ID to add billing details: ");
+    scanf("%d",&patientId);
+
+    if (patientId==patient->id)
+    {
+        printf("\nEnter Billing Details for Patient ID %d:\n",patient->id);
+        printf("Operation Cost: ");
+        scanf("%f",&patient->bill.operation);
+
+        printf("Medicine Cost: ");
+        scanf("%f",&patient->bill.medicine);
+
+        printf("Regular Checkup Cost: ");
+        scanf("%f",&patient->bill.checkup);
+
+        printf("Doctor Visit Cost: ");
+        scanf("%f",&patient->bill.doctorVisit);
+
+        printf("Ward/Cabin Fare: ");
+        scanf("%f",&patient->bill.wardCabin);
+
+        calculateTotal(&patient->bill);
+        printf("Total Bill: %.2f\n",patient->bill.total);
+
+        FILE *patientbills;
+        patientbills=fopen("bills.csv", "a");
+        fprintf(patientbills,"Patient ID: %d\nOperation Cost: %.2f\nMedicine Cost: %.2f\nRegular Checkup Cost: %.2f\nDoctor Visit Cost: %.2f\nWard/Cabin Fare: %.2f\nTotal Bill: %.2f\n",
+                patient->id,patient->bill.operation,patient->bill.medicine,patient->bill.checkup,patient->bill.doctorVisit,patient->bill.wardCabin,patient->bill.total);
+
+        fclose(patientbills);
+    }
+    else
+    {
+        printf("Patient ID %d not found.\n",patientId);
+    }
+}
 
 int LastPatientId()
 {
-    FILE *patientsFile=fopen("patients.csv","r");
+    FILE *patientsFile;
+    patientsFile=fopen("patients.csv","r");
+
     if(patientsFile==NULL)
     {
         return 1;
     }
+
     int lastId=0;
     int currentId;
-    while(fscanf(patientsFile,"ID: %d",&lastId)==1)
+    while(fscanf(patientsFile,"ID: %d",&lastId) !=EOF)
     {
-        lastId=currentId;
+        currentId=lastId;
     }
 
     fclose(patientsFile);
-    return lastId+1;
+    return currentId + 1;
 }
 
 struct Patient *createPatient()
@@ -525,6 +918,7 @@ void admitPatient(struct Patient *head1)
     current_dateTime(newPatient->date_time);
 
     newPatient->id=LastPatientId();
+    addBilling(newPatient);
     newPatient->next = head1;
     head1=newPatient;
 
@@ -536,6 +930,83 @@ void admitPatient(struct Patient *head1)
     printf("Patient admitted successfully. Patient ID: %d\nAdmission Date & Time: %s\n\n",newPatient->id,newPatient->date_time);
 }
 
+void searchBillById(int patientId)
+{
+    FILE *billFile=fopen("bills.csv", "r");
+
+    if(billFile==NULL)
+    {
+        printf("No bill found.\n");
+        return;
+    }
+
+    int currentId;
+    float operation,medicine,checkup,doctorVisit,wardCabin,total;
+
+    while(fscanf(billFile,"Patient ID: %d\nOperation Cost: %f\nMedicine Cost: %f\nRegular Checkup Cost: %f\nDoctor Visit Cost: %f\nWard/Cabin Fare: %f\nTotal Bill: %f\n",
+                  &currentId,&operation,&medicine,&checkup,&doctorVisit,&wardCabin,&total) == 7) {
+        if(currentId==patientId)
+        {
+            printf("Billing Details for Patient ID %d:\n",patientId);
+            printf("Operation Cost: %.2f\n",operation);
+            printf("Medicine Cost: %.2f\n",medicine);
+            printf("Regular Checkup Cost: %.2f\n",checkup);
+            printf("Doctor Visit Cost: %.2f\n",doctorVisit);
+            printf("Ward/Cabin Fare: %.2f\n",wardCabin);
+            printf("Total Bill: %.2f\n",total);
+
+            fclose(billFile);
+            return;
+        }
+    }
+    printf("Patient ID %d not found in the bill records.\n",patientId);
+
+    fclose(billFile);
+}
+
+void makePayment(struct Patient *patient)
+{
+    int patientId;
+    float amount;
+
+    printf("\nEnter the Patient ID for payment: ");
+    scanf("%d",&patientId);
+
+    if (patientId==patient->id) {
+        printf("Current Total Bill: %.2f\n",patient->bill.total);
+        printf("Enter the payment amount: ");
+        scanf("%f",&amount);
+
+        if (amount>=0)
+        {
+            if (amount<=patient->bill.total)
+            {
+                patient->bill.total-=amount;
+
+                FILE *patientbills;
+                patientbills=fopen("bills.csv", "a");
+                fprintf(patientbills, "Patient ID: %d\nPayment Amount: %.2f\nRemaining Balance: %.2f\n",patient->id, amount, patient->bill.total);
+                fclose(patientbills);
+
+                printf("Payment of %.2f made successfully.\n",amount);
+            }
+            else if(amount>patient->bill.total)
+            {
+                amount-=patient->bill.total;
+                printf("Returning Extra Paid Amount: ",amount);
+                printf("\n");
+            }
+        }
+        else
+        {
+            printf("Invalid payment amount. You can't pay negative amount.\n");
+        }
+    }
+    else
+    {
+        printf("Patient ID %d not found.\n",patientId);
+    }
+}
 
 void freeMemory()
 {
@@ -548,6 +1019,7 @@ void freeMemory()
         current=next;
     }
 }
+
 
 void patientDatabase()
 {
@@ -567,13 +1039,15 @@ void patientDatabase()
 }
 
 
-bool isAdmin(char *user, char *pass)
+
+
+bool isAdmin(char *user,char *pass)
 {
     char username[][USERNAME_LENGHT]={"COMMON_USER","common_user","RECEPTION","reception","ADMIN","admin"};
     char password[][PASSWORD_LENGHT]={"LOGIN","login","COMMON_USER","common_user","ADMINISTRATOR","administrator"};
     int size =sizeof(username)/sizeof(username[0]);
     int i;
-    for (i=0; i<size;i++)
+    for (i=0;i<size;i++)
     {
         if(strcmp(username[i],user)==0 && strcmp(password[i],pass)==0)
         {
@@ -590,7 +1064,7 @@ int main()
 
     login_pannel(username, password);
 
-    int choice;
+    char choice;
     do {
         printf("\nHospital Management System\n");
         printf("1. Admit Patient\n");
@@ -607,9 +1081,9 @@ int main()
         printf("12. Search Support Staff\n");
         printf("13. Exit\n");
         printf("Enter your choice: ");
-        scanf("%d",&choice);
+        scanf("%c",choice);
 
-    switch (choice)
+    switch(choice)
     {
         case 1:
             admitPatient(head1);
